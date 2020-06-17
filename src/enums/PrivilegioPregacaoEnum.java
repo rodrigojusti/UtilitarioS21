@@ -1,0 +1,11 @@
+package enums;
+
+public enum PrivilegioPregacaoEnum {
+	
+	PIONEIRO_REGULAR,
+	PIONEIRO_AUXILIAR_INDETERMINADO,
+	PIONEIRO_ESPECIAL,
+	PIONEIRO_AUXILIAR;
+	
+
+}
