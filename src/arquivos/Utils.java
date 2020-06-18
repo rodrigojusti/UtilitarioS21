@@ -27,10 +27,15 @@ public class Utils {
 	}
 
 	public int retornarMinutosRelatorio(double horas) {
-		if (horas >= 0.0) {
-			return (int) Math.floor((horas % 1) * 100);
+		int i = 0;
+		if (horas >= 0.0 && horas < 60.0) {
+			//Separa minutos das horas
+			i = (int) Math.floor((horas % 1) * 100);
+			
+			//Converte decimais em minutos
+			i = i * 60 / 100;
 		}
-		return 0;
+		return i;
 	}
 
 	public int retornarNumeroMes(MesEnum mes) {

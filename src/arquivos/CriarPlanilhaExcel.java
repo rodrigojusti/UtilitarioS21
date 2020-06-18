@@ -28,23 +28,28 @@ public class CriarPlanilhaExcel {
 			Row row = planilhaPublicadores.createRow(rownum++);
 			int cellnum = 0;
 
-			// ID
+			// ID - A
 			Cell cellId = row.createCell(cellnum++);
 			cellId.setCellValue(publicador.getId());
 
-			// Nome
+			// Nome - B
 			Cell cellNome = row.createCell(cellnum++);
 			cellNome.setCellValue(publicador.getNome());
 
-			// Grupo - Todos grupo 1
+			// Vazio -> ultimo nome - C
+			Cell cellVazioC = row.createCell(cellnum++);
+			cellVazioC.setBlank();
+			
+			
+			// Grupo (Todos grupo 1) - D
 			Cell cellGrupo = row.createCell(cellnum++);
 			cellGrupo.setCellValue(1);
 
-			// Pioneiro - sem tratamento
+			// Pioneiro (sem tratamento) - E
 			Cell cellPio = row.createCell(cellnum++);
 			cellPio.setCellValue(0);
 
-			// Servo Minisnterial
+			// Servo Minisnterial - F
 			Cell cellSm = row.createCell(cellnum++);
 			if (publicador.isServoMinisterial()) {
 				cellSm.setCellValue(1);
@@ -52,7 +57,7 @@ public class CriarPlanilhaExcel {
 				cellSm.setCellValue(0);
 			}
 
-			// Anciao
+			// Anciao - G
 			Cell cellAnciao = row.createCell(cellnum++);
 			if (publicador.isAnciao()) {
 				cellAnciao.setCellValue(1);
@@ -60,28 +65,29 @@ public class CriarPlanilhaExcel {
 				cellAnciao.setCellValue(0);
 			}
 
-			// Ungido - sem ungidos
+			// Ungido (sem ungidos) - H
 			Cell cellUngido = row.createCell(cellnum++);
 			cellUngido.setCellValue(0);
 
-			// Dessassociado
+			// Dessassociado (sem dessassociados) - I
 			Cell cellDessassociado = row.createCell(cellnum++);
 			cellDessassociado.setCellValue(0);
 
-			// Desativado
+			// Desativado (sem desativados) - J
 			Cell cellDesativado = row.createCell(cellnum++);
 			cellDesativado.setCellValue(0);
 
-			// Data batismo
+			// Data nascimento - K
 			Cell cellDtNascimento = row.createCell(cellnum++);
 			cellDtNascimento.setCellValue(new Utils().converterDataParaTexto(publicador.getDataNascimento()));
 
-			// Data batismo
+			// Data batismo - L
 			Cell cellDtBatismo = row.createCell(cellnum++);
 			if (publicador.isBatizado()) {
 				cellDtBatismo.setCellValue(new Utils().converterDataParaTexto(publicador.getDataBatismo()));
 			}
-			// Genero
+			
+			// Genero - M
 			Cell cellGenero = row.createCell(cellnum++);
 			if (publicador.isGeneroMasculino()) {
 				cellGenero.setCellValue(1);
@@ -108,8 +114,8 @@ public class CriarPlanilhaExcel {
 	}
 
 	public void gerarPlanilhaRelatorios(List<Publicador> publicadores, File arquivoXls) {
-		XSSFWorkbook workbook = new XSSFWorkbook();
-		XSSFSheet planilhaPublicadores = workbook.createSheet("Relatorios");
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet planilhaPublicadores = workbook.createSheet("Relatorios");
 		int rownum = 0;
 		for (Publicador publicador : publicadores) {
 			System.out.println("Iterando-> " + publicador.getNome());
@@ -118,55 +124,57 @@ public class CriarPlanilhaExcel {
 				Row row = planilhaPublicadores.createRow(rownum++);
 				int cellnum = 0;
 
-				// Nome
+				// Nome - A
 				Cell cellNome = row.createCell(cellnum++);
 				cellNome.setCellValue(publicador.getNome());
 
-				// Ano
+				// Ano - B
 				Cell cellAno = row.createCell(cellnum++);
 				cellAno.setCellValue(relatorio.getAno());
 
-				// Mes - Retornar numero
+				// Mes (1=jan | 12=dez) - C
 				Cell cellMes = row.createCell(cellnum++);
 				Utils util = new Utils();
 				int mes = util.retornarNumeroMes(relatorio.getMes());
 				cellMes.setCellValue(mes);
 
-				// Vazios -> Livros / Brochuras (relatorios antigos)
-				Cell cellVazio = row.createCell(cellnum++);
-				cellVazio.setBlank();
-				cellVazio.setBlank();
+				// Vazios -> Livros / Brochuras (relatorios antigos) - D e E
+				Cell cellVazioD = row.createCell(cellnum++);
+				cellVazioD.setBlank();
+				Cell cellVazioE = row.createCell(cellnum++);
+				cellVazioE.setBlank();
 
-				// Publicacoes
+				// Publicacoes - F
 				Cell cellPub = row.createCell(cellnum++);
 				cellPub.setCellValue(relatorio.getPublicacoes());
 
-				// Videos
+				// Videos - G
 				Cell cellVideo = row.createCell(cellnum++);
 				cellVideo.setCellValue(relatorio.getVideos());
 
-				// Horas (completas)
+				// Horas (completas) - H
 				Cell cellHora = row.createCell(cellnum++);
 				int i = util.retornarHorasRelatorio(relatorio.getHoras());
 				cellHora.setCellValue(i);
 
-				// Minutos
+				// Minutos - I
 				Cell cellMin = row.createCell(cellnum++);
 				int j = util.retornarMinutosRelatorio(relatorio.getHoras());
 				cellMin.setCellValue(j);
 
-				// Revistas -> relatorios antigos
-				cellVazio.setBlank();
+				// Vazio -> Revistas (relatorios antigos) - J
+				Cell cellVazioJ = row.createCell(cellnum++);
+				cellVazioJ.setBlank();
 
-				// Revisitas
+				// Revisitas - K
 				Cell cellRevisita = row.createCell(cellnum++);
 				cellRevisita.setCellValue(relatorio.getRevisitas());
 
-				// Estudo
+				// Estudo - L
 				Cell cellEstudo = row.createCell(cellnum++);
 				cellEstudo.setCellValue(relatorio.getEstudos());
 
-				// Pioneiro?
+				// Pioneiro? - M
 				Cell cellPioneiro = row.createCell(cellnum++);
 				if (relatorio.isPioneiroAuxiar()) {
 					cellPioneiro.setCellValue(1);
@@ -176,7 +184,7 @@ public class CriarPlanilhaExcel {
 					cellPioneiro.setCellValue(0);
 				}
 
-				// Estudo
+				// Observacao - N
 				Cell cellObs = row.createCell(cellnum++);
 				cellObs.setCellValue(relatorio.getObservacao());
 

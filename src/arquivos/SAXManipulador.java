@@ -12,6 +12,7 @@ import enums.Esperanca;
 import enums.Genero;
 import enums.MesEnum;
 import enums.PrivilegioDianteira;
+import enums.PrivilegioPregacaoEnum;
 import publicadores.Publicador;
 import publicadores.Relatorio;
 
@@ -29,7 +30,7 @@ public class SAXManipulador extends DefaultHandler {
 	public void startDocument() {
 		publicadores = new ArrayList<Publicador>();
 		relatorios = new ArrayList<Relatorio>();
-		relatorio = new Relatorio();
+		
 
 	}
 
@@ -44,6 +45,7 @@ public class SAXManipulador extends DefaultHandler {
 
 		if (attributes.getLength() > 0 && !qName.equalsIgnoreCase("Agent")) {
 			ano = Integer.valueOf(attributes.getValue("Year"));
+			relatorio = new Relatorio();
 		}
 
 	}
@@ -165,13 +167,14 @@ public class SAXManipulador extends DefaultHandler {
 		List<MesEnum> mes = Arrays.asList(MesEnum.values());
 		for (MesEnum mesEnum : mes) {
 			if (qName.equalsIgnoreCase(mesEnum.valorMes)) {
-				if (isMudarAnoServico(qName)) {
-					// Muda ano serviço
-					relatorio.setAno(ano + 1);
-				} else {
-					// Nao muda ano serviço
+//		Mudanca de cenario -> geracao da planilha
+//				if (isMudarAnoServico(qName)) {
+//					// Muda ano serviço
+//					relatorio.setAno(ano + 1);
+//				} else {
+//					// Nao muda ano serviço
 					relatorio.setAno(ano);
-				}
+//				}
 				relatorio.setMes(mesEnum);
 				adicionarObjetoPublicador();
 			}
@@ -206,6 +209,17 @@ public class SAXManipulador extends DefaultHandler {
 		if (qName.equalsIgnoreCase("Remark")) {
 			relatorio.setObservacao(elementValue);
 		}
+		
+		if (qName.equalsIgnoreCase("Pio")) {
+			if (elementValue.equalsIgnoreCase("Reg")) {
+				relatorio.setPioneiro(PrivilegioPregacaoEnum.PIONEIRO_REGULAR);
+			}
+			
+			if (elementValue.equalsIgnoreCase("Aux")) {
+				relatorio.setPioneiro(PrivilegioPregacaoEnum.PIONEIRO_AUXILIAR);
+			}
+			
+		}
 
 		// Terminou
 	}
@@ -221,6 +235,7 @@ public class SAXManipulador extends DefaultHandler {
 
 	}
 	
+	@SuppressWarnings("unused")
 	private boolean isMudarAnoServico(String qName) {
 		/*	Ano de serviço começa em setembro.
 		 * 	Então, se estivessemos em setembro de 2020
